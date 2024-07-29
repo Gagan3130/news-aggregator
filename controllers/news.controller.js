@@ -8,12 +8,10 @@ const getAllNews = asyncHandler(async (req, res, next) => {
   const { id } = req.user;
   const user = AuthUserService.findUserById(id);
   if (!user) {
-    next(
       new NotFoundError({
         code: errorCodes.USER_NOT_FOUND,
         message: "User not found",
       })
-    );
   }
   const preferences = user.preferences;
   const getNews = await NewsService.getNewsByUserPreferences(preferences);
@@ -25,12 +23,10 @@ const getSearchedNews = asyncHandler(async (req, res) => {
   const { query } = req.params;
   const user = AuthUserService.findUserById(id);
   if (!user) {
-    next(
       new NotFoundError({
         code: errorCodes.USER_NOT_FOUND,
         message: "User not found",
       })
-    );
   }
   const response = await NewsService.getNewsByQuery(query);
   res.status(200).json(response);
