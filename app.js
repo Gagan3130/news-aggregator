@@ -24,7 +24,6 @@ app.use("/api/users", userRoute);
 app.use("/api/news", newsRoute);
 
 app.use((err, req, res, next) => {
-  console.log(err, "error", err.stack);
   if (err instanceof ValidationError) {
     res.status(400).json({ error: err.message, code: err.code });
   } else if (err instanceof UnAuthorisedError) {

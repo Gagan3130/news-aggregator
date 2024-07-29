@@ -5,11 +5,9 @@ class NewsServices {
   async getNewsByUserPreferences(preferences) {
     const response = await checkNewsCache();
     const arr = [];
-    // console.log(response, "newsCache");
     preferences.map((category) => {
       arr.push(...response[`${category}`]);
     });
-    // console.log(arr, "arr");
     return arr;
   }
 
