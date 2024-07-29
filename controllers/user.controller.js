@@ -3,19 +3,21 @@ const AuthUserServices = require("../services/user.services");
 const { NotFoundError, ValidationError } = require("../utils/custom-error");
 const errorCodes = require("../utils/error-codes");
 const { users } = require("../data");
+const asyncHandler = require("express-async-handler");
 
-const userRegistration = async (req, res) => {
+// error thrown using throw keyword in synchronous code is automatically handled by express and pass it down to error middleware in app
+// error thrown in async code must be handle either by passing error in next argument and if you are using throw keyword then express will not pass down that error to error middleware so either you can write your own code layer to handle it or you can use express-async-handle library which pass the error down to error middleware
+
+const userRegistration = asyncHandler(async (req, res, next) => {
   const { name, password, email, preferences } = req.body;
 
   if (AuthUserServices.findUserByEmail(email)) {
-    // throw new ValidationError({
-    //   code: errorCodes.VALIDATION_ERROR,
-    //   message: "Email already exist",
-    // });
-    return res.status(400).json({
-      error: "Email already exist",
-      code: "VALIDATION_ERROR",
-    });
+    next(
+      new ValidationError({
+        code: errorCodes.VALIDATION_ERROR,
+        message: "Email already exist",
+      })
+    );
   }
 
   const user = {
@@ -28,9 +30,9 @@ const userRegistration = async (req, res) => {
   };
   users.push(user);
   return res.status(201).send("User registered Successfully");
-};
+});
 
-const userLogin = async (req, res) => {
+const userLogin = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = AuthUserServices.findUserByEmail(email);
@@ -39,13 +41,10 @@ const userLogin = async (req, res) => {
 
   if (!user) {
     console.log("user not found");
-    // throw new NotFoundError({
-    //   code: errorCodes.USER_NOT_FOUND,
-    //   message: "User not found",
-    // });
-    return res.status(404).json({
-      error: "User not found",
+
+    throw new NotFoundError({
       code: errorCodes.USER_NOT_FOUND,
+      message: "User not found",
     });
   }
 
@@ -57,13 +56,9 @@ const userLogin = async (req, res) => {
   console.log(validatePassword, "validatePass");
 
   if (!validatePassword) {
-    // throw new ValidationError({
-    //   code: errorCodes.VALIDATION_ERROR,
-    //   message: "Incorrect password",
-    // });
-    return res.status(400).json({
-      error: "Incorrect password",
+    new ValidationError({
       code: errorCodes.VALIDATION_ERROR,
+      message: "Incorrect password",
     });
   }
 
@@ -75,9 +70,9 @@ const userLogin = async (req, res) => {
     preferences: user.preferences,
     createdAt: user.createdAt,
   });
-};
+});
 
-const getUserNewsPreference = (req, res) => {
+const getUserNewsPreference = (req, res, next) => {
   const { id } = req.user;
 
   const user = AuthUserServices.findUserById(id);
@@ -94,7 +89,7 @@ const getUserNewsPreference = (req, res) => {
   return res.status(200).json(user.preferences);
 };
 
-const updateUserNewsPrefernces = (req, res) => {
+const updateUserNewsPrefernces = (req, res, next) => {
   const { email } = req.user;
   const { preferences = [] } = req.body;
 

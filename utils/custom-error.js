@@ -6,6 +6,7 @@ class CustomError extends Error {
     this.type = type;
     this.code = code || null;
     console.log(this.constructor.name, "this", this.constructor);
+    Error.captureStackTrace(this, this.constructor)
   }
 }
 
