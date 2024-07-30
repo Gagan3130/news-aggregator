@@ -32,10 +32,13 @@ Features
 
 Project Setup ->
 
-Prerequisites ->
+**Prerequisites ->**
 
-Node.js
-NPM Installation Clone the repository: bash Copy code git clone https://github.com/Gagan3130/news-aggregator.git Navigate to the project directory: bash Copy code cd task-manager-api Install the dependencies: npm install
+1. Install Node.js
+2. NPM Installation Clone the repository: bash Copy code git clone https://github.com/Gagan3130/news-aggregator.git Navigate to the project directory: bash Copy code cd news-aggregator.
+3. Install the dependencies: npm install
+4. Create .env file and add JWT_SECRET_KEY=your_jwt_secret
+
 Start the server: npm start
 
 The API will be available at http://localhost:8080.
