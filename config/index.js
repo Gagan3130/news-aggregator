@@ -1,11 +1,10 @@
 const categories = [
   "business",
-  "entertainment",
-  "general",
   "health",
+  "entertainment",
   "science",
   "sports",
-  "technology",
+  "general"
 ];
 
 module.exports = { categories };

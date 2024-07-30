@@ -11,7 +11,7 @@ const cacheUpdater = async () => {
     console.log("Cache updated via cron job");
     return newsCache.data;
   } catch (error) {
-    console.log("cache updater failed");
+    // console.log("cache updater failed");
     throw new Error("failed to fetch news", error);
   }
 };

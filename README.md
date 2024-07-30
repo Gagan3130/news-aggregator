@@ -1,6 +1,6 @@
 Brief This project involves building a RESTful API for a simple news aggragator application with user authentication using Node.js, Express.js, and NPM packages.
 
-Project Description: The API enables users to retrieve news based on user preferences and caches the API results, revalidate the cache and update the cache periodically. The project includes setting up a basic Node.js environment with Express.js and other necessary NPM packages. The API supports input validation, error handling, and is tested using Postman or Curl.
+Project Description: **The API enables users to retrieve news based on user preferences and caches the API results, revalidate the cache and update the cache periodically**. The project includes setting up a basic Node.js environment with Express.js and other necessary NPM packages. The API supports input validation, error handling, and is tested using Postman or Curl.
 
 API Endpoints ->
 
@@ -16,10 +16,19 @@ GET /api/news: Retrieve all news from external news API based on user prefernce.
 
 GET /api/news/serach/:query: Retrive the news based on query keyword
 
+POST /api/news/:newsId/read: Mark news as read;
 
-External News Api: https://newsapi.org/v2/top-headlines
+POST /api/news/:newsId/favourite: Mark news as favourite;
 
-Features
+GET /api/news/read: Get all read articles
+
+GET /api/news/favourites: Get all favourites articles
+
+
+
+External News Api: https://api.thenewsapi.com
+
+**Features**
 
 1. In-memory data store (e.g., an array) to store users.
 2. Proper error handling for invalid requests(made custom error classes -> /utils/custom-error.js)
@@ -37,7 +46,7 @@ Project Setup ->
 1. Install Node.js
 2. NPM Installation Clone the repository: bash Copy code git clone https://github.com/Gagan3130/news-aggregator.git Navigate to the project directory: bash Copy code cd news-aggregator.
 3. Install the dependencies: npm install
-4. Create .env file and add JWT_SECRET_KEY=your_jwt_secret
+4. Create .env file and add JWT_SECRET_KEY=your_jwt_secret and NEWS_API_KEY=your_news_api_key
 
 Start the server: npm start
 

@@ -12,12 +12,10 @@ const userRegistration = asyncHandler(async (req, res, next) => {
   const { name, password, email, preferences } = req.body;
 
   if (AuthUserServices.findUserByEmail(email)) {
-    next(
-      new ValidationError({
+      throw new ValidationError({
         code: errorCodes.VALIDATION_ERROR,
         message: "Email already exist",
       })
-    );
   }
 
   const user = {
@@ -26,6 +24,8 @@ const userRegistration = asyncHandler(async (req, res, next) => {
     password: await AuthUserServices.hashPassword(password),
     preferences,
     email,
+    readArticles: [],
+    favouriteArticles: [],
     createdAt: Date.now(),
   };
   users.push(user);
@@ -37,11 +37,7 @@ const userLogin = asyncHandler(async (req, res, next) => {
 
   const user = AuthUserServices.findUserByEmail(email);
 
-  console.log(user, "user");
-
   if (!user) {
-    console.log("user not found");
-
     throw new NotFoundError({
       code: errorCodes.USER_NOT_FOUND,
       message: "User not found",
@@ -53,10 +49,8 @@ const userLogin = asyncHandler(async (req, res, next) => {
     user.password
   );
 
-  console.log(validatePassword, "validatePass");
-
   if (!validatePassword) {
-    new ValidationError({
+    throw new ValidationError({
       code: errorCodes.VALIDATION_ERROR,
       message: "Incorrect password",
     });
@@ -68,6 +62,8 @@ const userLogin = asyncHandler(async (req, res, next) => {
     name: user.name,
     email: user.email,
     preferences: user.preferences,
+    readArticles: user.readArticles,
+    favouriteArticles: user.favouriteArticles,
     createdAt: user.createdAt,
   });
 });
@@ -76,8 +72,6 @@ const getUserNewsPreference = (req, res, next) => {
   const { id } = req.user;
 
   const user = AuthUserServices.findUserById(id);
-
-  console.log(user, "user");
 
   if (!user) {
     throw new NotFoundError({
@@ -94,8 +88,6 @@ const updateUserNewsPrefernces = (req, res, next) => {
   const { preferences = [] } = req.body;
 
   const response = AuthUserServices.updatePrefernces(preferences, email);
-
-  console.log(response);
 
   return res.status(200).json({
     id: response.id,
